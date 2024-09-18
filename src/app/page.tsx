@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import type { Post } from "./_type/Post";
 import parse from 'html-react-parser';
+import { fileURLToPath } from "url";
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -15,9 +16,10 @@ const Home: React.FC = () => {
         const response = await fetch("https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts");
         const data = await response.json();
         setPosts(data.posts);
-        setLoading(false);
-      }catch(error){
+      } catch(error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
     getAllPosts();
