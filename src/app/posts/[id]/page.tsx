@@ -24,13 +24,14 @@ const Detail: React.FC<Props> = ({params}) => {
 
   useEffect(()=>{
     const findPost = async() => {
-      try{
+      try {
         const response = await fetch(`https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${params.id}`);
         const data = await response.json();
         setPost(data.post);
-        setLoading(false);
-      }catch(error){
+      } catch(error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
     findPost();
