@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import type { Post } from "./_type/Post";
 import parse from 'html-react-parser';
-import { fileURLToPath } from "url";
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
