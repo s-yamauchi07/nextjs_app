@@ -11,13 +11,6 @@ type Props = {
   };
 }
 
-type Image = {
-  src: string;
-  height: number;
-  width: number;
-  alt: string;
-}
-
 const Detail: React.FC<Props> = ({params}) => {
   const [post, setPost] = useState<Post>();
   const [isLoading, setLoading] = useState<boolean>(true);
