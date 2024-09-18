@@ -29,38 +29,36 @@ const Home: React.FC = () => {
   if (!posts.length) return <div>記事が見つかりませんでした。</div>;
 
   return (
-    <>
-      <main className="pt-10">
-        <ul className="flex flex-col gap-8">
-          {posts.map((post)=> {
-            return(
-              <li key={post.id} className="m-auto p-4 border border-solid border-gray-300 max-w-3xl">
-                <Link href={`/posts/${post.id}`}>
-                  <div className="flex justify-between">
-                    <p className="text-sm text-gray-400">{changeDateFormat(post.createdAt)}</p>
-                    <div className="flex gap-2">
-                      {post.categories.map((category, index)=>{
-                        return(
-                          <span key={index} className="px-2 py-1 text-xs text-blue-600 border border-solid border-blue-600 rounded">
-                            {category}
-                          </span>
-                        )
-                      })}
-                    </div>
+    <main className="pt-10">
+      <ul className="flex flex-col gap-8">
+        {posts.map((post)=> {
+          return(
+            <li key={post.id} className="m-auto p-4 border border-solid border-gray-300 max-w-3xl">
+              <Link href={`/posts/${post.id}`}>
+                <div className="flex justify-between">
+                  <p className="text-sm text-gray-400">{changeDateFormat(post.createdAt)}</p>
+                  <div className="flex gap-2">
+                    {post.categories.map((category, index)=>{
+                      return(
+                        <span key={index} className="px-2 py-1 text-xs text-blue-600 border border-solid border-blue-600 rounded">
+                          {category}
+                        </span>
+                      )
+                    })}
                   </div>
-                  <h2 className="text-2xl py-4">
-                    {post.title}
-                  </h2>
-                  <div className="line-clamp-2">
-                    {parse(post.content)}
-                  </div>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-      </main>
-    </>
+                </div>
+                <h2 className="text-2xl py-4">
+                  {post.title}
+                </h2>
+                <div className="line-clamp-2">
+                  {parse(post.content)}
+                </div>
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </main>
   );
 }
 
