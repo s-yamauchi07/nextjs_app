@@ -39,7 +39,6 @@ interface CreatePostRequestBody {
 
 export const POST = async (request: NextRequest) => {
   try {
-    console.log(request)
     const body = await request.json()
     const { title, content, thumbnailUrl, categories}: CreatePostRequestBody  = body
 
