@@ -75,3 +75,21 @@ export const PUT = async(request: NextRequest, {params}: { params: { id: string 
       return NextResponse.json({ status: error.message }, { status: 400 })
   }
 }
+
+// 記事削除のAPI
+export const DELETE = async (request: NextRequest, { params}: { params: { id: string } }) => {
+  const { id } = params
+
+  try {
+    await prisma.post.delete({
+      where: {
+        id: parseInt(id)
+      },
+    })
+
+    return NextResponse.json({ status: 'OK'}, { status: 200 })
+  } catch(error) {
+    if (error instanceof Error)
+      return NextResponse.json({ status: error.message }, { status: 400 })
+  }
+}
