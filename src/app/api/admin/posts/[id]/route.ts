@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { RequestBody } from "../../../../_type/RequestBody";
+import { RequestPostBody } from "../../../../_type/RequestPostBody";
 
 const prisma = new PrismaClient
 
@@ -39,7 +39,7 @@ export const PUT = async(request: NextRequest, {params}: { params: { id: string 
   const { id } = params
 
   const body = await request.json()
-  const { title, content, thumbnailUrl, categories}: RequestBody  = body
+  const { title, content, thumbnailUrl, categories}: RequestPostBody  = body
 
   try {
     const post = await prisma.post.update({
