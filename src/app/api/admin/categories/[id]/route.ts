@@ -44,3 +44,21 @@ export const PUT = async (request: NextRequest, { params}: { params: { id: strin
       return NextResponse.json({ status: error.message }, { status: 400 })
   }
 }
+
+// カテゴリー削除のAPI
+export const DELETE = async (request: NextRequest, { params }: { params: { id: string} }) => {
+  const { id } = params
+
+  try{
+    await prisma.category.delete({
+      where: {
+        id: parseInt(id)
+      },
+    })
+
+    return NextResponse.json({ status: 'OK', message: 'カテゴリーを削除しました'} , { status: 200 })
+  } catch(error) {
+    if (error instanceof Error)
+      return NextResponse.json({ status: error.message }, { status: 400 })
+  }
+}
