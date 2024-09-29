@@ -47,7 +47,7 @@ export const POST = async (request: NextRequest) => {
     for (const category of categories) {
       await prisma.postCategory.create({
         data: {
-          categoryId: category.id as number,
+          categoryId: parseInt(category.id as unknown as string, 10),
           postId: data.id,
         },
       })
