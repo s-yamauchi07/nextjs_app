@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { RequestPostBody } from "../../../_type/RequestPostBody";
 
-const prisma = new PrismaClient;
+const prisma = new PrismaClient();
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -47,7 +47,7 @@ export const POST = async (request: NextRequest) => {
     for (const category of categories) {
       await prisma.postCategory.create({
         data: {
-          categoryId: category.id,
+          categoryId: category.id as number,
           postId: data.id,
         },
       })
