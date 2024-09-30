@@ -2,6 +2,7 @@
 
 import SideBar from "@/app/_components/SideBar";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"
 import { useForm, SubmitHandler } from "react-hook-form";
 
 type Props = {
@@ -18,6 +19,7 @@ type Category = {
 
 const EditCategories: React.FC<Props> = ({params}) => {
   const { id } = params
+  const router = useRouter();
   const [category, setCategory] = useState<Category>();
   const { register, handleSubmit, setValue } = useForm<Category>();
   
@@ -50,6 +52,22 @@ const EditCategories: React.FC<Props> = ({params}) => {
     }
   }
 
+  const handleDelete = async() => {
+    try {
+      const response = await fetch(`/api/admin/categories/${id}`, {
+        method: "DELETE",
+        body: JSON.stringify(id)
+      })
+      const { status } = await response.json();
+      console.log(status)
+      if(status == "OK") {
+        router.push("/admin/categories");
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   if(!category) return <div>読み込み中...</div>
 
   return(
@@ -64,13 +82,13 @@ const EditCategories: React.FC<Props> = ({params}) => {
           onSubmit={handleSubmit(onsubmit)}
           className="flex flex-col gap-4"
         >
-          <label htmlFor="name">カテゴリー</label>
+          <label htmlFor="name">カテゴリー名</label>
           <input type="text"
             id="name"
             className="border border-solid border-gray-200 rounded-lg p-2"
             {...register("name")}
           />
-          <div>
+          <div className="flex gap-2">
             <button 
               type="submit"
               className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
@@ -80,6 +98,7 @@ const EditCategories: React.FC<Props> = ({params}) => {
             <button 
               type="button"
               className="bg-red-600 text-white font-bold rounded-lg px-4 py-2"
+              onClick={() => handleDelete()}
             >
               削除
             </button>
