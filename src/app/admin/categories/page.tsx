@@ -31,13 +31,13 @@ const AllCategories: React.FC = () => {
       <div className="p-10 w-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold">
-            カテゴリー作成
+            カテゴリー一覧
           </h2>
           <div>
             <button type="button"
               className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
             >
-              <Link href="/admin/posts/new">新規作成</Link>
+              <Link href="/admin/categories/new">新規作成</Link>
             </button>
           </div>
         </div>
@@ -50,7 +50,9 @@ const AllCategories: React.FC = () => {
                   key={category.id}
                   className="font-bold text-lg py-2 border-b-2"
                 >
+                <Link href={`/admin/categories/${category.id}`}>
                   {category.name}
+                </Link>
                 </li>
               )
             })}
