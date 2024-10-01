@@ -4,6 +4,26 @@ import SideBar  from "../../../_components/SideBar";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
+import { Theme, useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Chip from '@mui/material/Chip';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 type PostForm = {
   title: string
   content: string
@@ -16,9 +36,26 @@ type Category = {
   name: string
 }
 
+function getStyles(category: Category, categoryName: string[], theme: Theme) {
+  return {
+    fontWeight: categoryName.includes(category.name)
+      ? theme.typography.fontWeightMedium
+      : theme.typography.fontWeightRegular,
+  };
+}
+
 const NewPost: React.FC = () => {
+  const theme = useTheme();
   const [categories, setCategories] = useState<Category[]>([]);
-  const { register,handleSubmit } = useForm<PostForm>();
+  const [categoryName, setCategoryName] = useState<string[]>([]);
+  const { register, handleSubmit, setValue, reset } = useForm<PostForm>();
+
+  const handleChange = (e: SelectChangeEvent<typeof categoryName>) => {
+    const { target: { value },} = e;
+    setCategoryName(
+      typeof value === "string" ? value.split(",") : value,
+    );
+  };
 
   // カテゴリー一覧を取得する
   useEffect(()=> {
@@ -37,18 +74,21 @@ const NewPost: React.FC = () => {
   // 記事の新規登録を実装
   const onsubmit: SubmitHandler<PostForm> = async (data) => {
     //選択したcategoryのデータを連想配列を使って新しく配列作成
-    const selectedCategories = data.categories.map((id) => ({id}));
 
     const postData = {
       ...data,
-      categories: selectedCategories,
+      categories: categories,
     };
-    console.log(postData)
+    
     try{
       await fetch("/api/admin/posts", {
         method: "POST",
         body: JSON.stringify(postData),
       })
+      reset()
+
+      setCategoryName([]);
+      setValue("categories", []);
     }catch (error) {
       console.log(error)
       alert('記事投稿に失敗しました');
@@ -67,68 +107,75 @@ const NewPost: React.FC = () => {
           onSubmit={handleSubmit(onsubmit)}
           className="flex flex-col gap-4">
           <div className="flex flex-col">
-            <label htmlFor="title"
+            <InputLabel htmlFor="title"
               className="mb-2"
             >
               タイトル
-            </label>
-            <input type="text"
+            </InputLabel>
+            <OutlinedInput type="text"
               id="title"
-              className="border border-solid border-gray-200 rounded-lg p-2"
               {...register("title")}
             />
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="content"
+            <InputLabel htmlFor="content"
               className="mb-2"
             >
               内容
-            </label>
-            <textarea
+            </InputLabel>
+            <TextareaAutosize
+              minRows={3}
               id="content"
-              className="border border-solid border-gray-200 rounded-lg p-2"
+              className="border border-solid border-gray-300 rounded-md p-2"
               {...register("content")}
             />
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="thumbnailUrl"
+            <InputLabel htmlFor="thumbnailUrl"
               className="mb-2"
             >
               サムネイルURL
-            </label>
-            <input type="text"
+            </InputLabel>
+            <OutlinedInput type="text"
               id="thumbnailUrl"
-              className="border border-solid border-gray-200 rounded-lg p-2"
               {...register("thumbnailUrl")}
             />
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="categories"
+            <InputLabel htmlFor="categories"
               className="mb-2"
             >
               カテゴリー
-            </label>
-            <select
+            </InputLabel>
+            <Select
               multiple 
               id="categories"
-              className="border border-solid border-gray-200 rounded-lg p-2"
-              {...register("categories")}        
+              value={categoryName}
+              onChange={handleChange}
+              MenuProps={MenuProps}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              )}      
             >
-              <option value=""></option>
               {categories && categories.map((category) => {
                 return(
-                  <option 
+                  <MenuItem 
                     key={category.id}
-                    value={category.id}
+                    value={category.name}
+                    style={getStyles(category, categoryName, theme)}
                    >
                     {category.name}
-                  </option>
+                  </MenuItem>
                 )
               })}
-            </select>  
+            </Select>  
           </div>
 
           <div>
