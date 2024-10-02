@@ -1,10 +1,11 @@
+"use client"
 
 import { usePathname } from 'next/navigation'
 import Link from "next/link";
 
 const SideBar: React.FC = () => {
   const pathname = usePathname();
-  
+
   const isSelected = (url: string) => {
     if (pathname === url || pathname.startsWith(url + "/")) {
       return true;

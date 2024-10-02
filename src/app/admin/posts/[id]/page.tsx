@@ -1,5 +1,5 @@
 "use client"
-import SideBar  from "../../../_components/SideBar";
+
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation"
@@ -57,7 +57,7 @@ const EditPost: React.FC<Props> = ({params}) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const { register, handleSubmit, setValue, reset } = useForm<PostForm>();
+  const { register, handleSubmit } = useForm<PostForm>();
 
   // 記事データを取得
   useEffect(()=> {
@@ -134,8 +134,6 @@ const EditPost: React.FC<Props> = ({params}) => {
   if(!post) return <div>読み込み中...</div>
 
   return(
-  <div className="flex">
-    <SideBar />
     <div className="p-10 w-full">
       <h2 className="text-xl font-bold mb-6">
         記事編集
@@ -236,7 +234,6 @@ const EditPost: React.FC<Props> = ({params}) => {
         </div>
       </form>
     </div>
-  </div>
   )
 }
 

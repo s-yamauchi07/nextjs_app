@@ -1,6 +1,5 @@
 "use client"
 
-import SideBar  from "../../../_components/SideBar";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
@@ -94,98 +93,95 @@ const NewPost: React.FC = () => {
   }
 
   return(
-    <div className="flex">
-      <SideBar />
-      <div className="p-10 w-full">
-        <h2 className="text-xl font-bold mb-6">
-          記事作成
-        </h2>
+    <div className="p-10 w-full">
+      <h2 className="text-xl font-bold mb-6">
+        記事作成
+      </h2>
 
-        <form 
-          onSubmit={handleSubmit(onsubmit)}
-          className="flex flex-col gap-4">
-          <div className="flex flex-col">
-            <InputLabel htmlFor="title"
-              className="mb-2"
-            >
-              タイトル
-            </InputLabel>
-            <OutlinedInput type="text"
-              id="title"
-              {...register("title")}
-            />
-          </div>
+      <form 
+        onSubmit={handleSubmit(onsubmit)}
+        className="flex flex-col gap-4">
+        <div className="flex flex-col">
+          <InputLabel htmlFor="title"
+            className="mb-2"
+          >
+            タイトル
+          </InputLabel>
+          <OutlinedInput type="text"
+            id="title"
+            {...register("title")}
+          />
+        </div>
 
-          <div className="flex flex-col">
-            <InputLabel htmlFor="content"
-              className="mb-2"
-            >
-              内容
-            </InputLabel>
-            <TextareaAutosize
-              minRows={3}
-              id="content"
-              className="border border-solid border-gray-300 rounded-md p-2"
-              {...register("content")}
-            />
-          </div>
+        <div className="flex flex-col">
+          <InputLabel htmlFor="content"
+            className="mb-2"
+          >
+            内容
+          </InputLabel>
+          <TextareaAutosize
+            minRows={3}
+            id="content"
+            className="border border-solid border-gray-300 rounded-md p-2"
+            {...register("content")}
+          />
+        </div>
 
-          <div className="flex flex-col">
-            <InputLabel htmlFor="thumbnailUrl"
-              className="mb-2"
-            >
-              サムネイルURL
-            </InputLabel>
-            <OutlinedInput type="text"
-              id="thumbnailUrl"
-              {...register("thumbnailUrl")}
-            />
-          </div>
+        <div className="flex flex-col">
+          <InputLabel htmlFor="thumbnailUrl"
+            className="mb-2"
+          >
+            サムネイルURL
+          </InputLabel>
+          <OutlinedInput type="text"
+            id="thumbnailUrl"
+            {...register("thumbnailUrl")}
+          />
+        </div>
 
-          <div className="flex flex-col">
-            <InputLabel htmlFor="categories"
-              className="mb-2"
-            >
-              カテゴリー
-            </InputLabel>
-            <Select
-              multiple 
-              id="categories"
-              value={categoryName}
-              onChange={handleChange}
-              MenuProps={MenuProps}
-              renderValue={(selected) => (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} />
-                  ))}
-                </Box>
-              )}      
-            >
-              {categories && categories.map((category) => {
-                return(
-                  <MenuItem 
-                    key={category.id}
-                    value={category.name}
-                    style={getStyles(category, categoryName, theme)}
-                   >
-                    {category.name}
-                  </MenuItem>
-                )
-              })}
-            </Select>  
-          </div>
+        <div className="flex flex-col">
+          <InputLabel htmlFor="categories"
+            className="mb-2"
+          >
+            カテゴリー
+          </InputLabel>
+          <Select
+            multiple 
+            id="categories"
+            value={categoryName}
+            onChange={handleChange}
+            MenuProps={MenuProps}
+            renderValue={(selected) => (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} />
+                ))}
+              </Box>
+            )}      
+          >
+            {categories && categories.map((category) => {
+              return(
+                <MenuItem 
+                  key={category.id}
+                  value={category.name}
+                  style={getStyles(category, categoryName, theme)}
+                  >
+                  {category.name}
+                </MenuItem>
+              )
+            })}
+          </Select>  
+        </div>
 
-          <div>
-            <button 
-              type="submit"
-              className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
-            >
-              作成
-            </button>
-          </div>
-        </form>
-      </div>
+        <div>
+          <button 
+            type="submit"
+            className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
+          >
+            作成
+          </button>
+        </div>
+      </form>
     </div>
   )
 }
