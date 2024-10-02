@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { RequestPostBody } from "../../../../_type/RequestPostBody";
 
-const prisma = new PrismaClient
+const prisma = new PrismaClient();
 
 // 記事詳細取得のAPI
 export const GET = async (request: NextRequest, { params }: { params: { id: string }}) => {

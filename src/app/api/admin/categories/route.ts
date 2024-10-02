@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-const prisma = new PrismaClient
+const prisma = new PrismaClient();
 
 // カテゴリー一覧の取得
 export const GET = async (request: NextRequest) => {

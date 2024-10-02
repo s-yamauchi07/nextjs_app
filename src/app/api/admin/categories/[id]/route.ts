@@ -2,7 +2,7 @@ import { RequestCategoryBody } from "@/app/_type/RequestCategoryBody";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-const prisma = new PrismaClient
+const prisma = new PrismaClient();
 
 // カテゴリー詳細表示のAPI
 export const GET = async (request: NextRequest, { params}: { params: { id: string }}) => {
