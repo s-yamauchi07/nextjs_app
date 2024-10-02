@@ -56,6 +56,7 @@ const EditPost: React.FC<Props> = ({params}) => {
   const [post, setPost] = useState<PostForm>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
+  const [AllCategories, setAllCategories] = useState<Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const { register, handleSubmit } = useForm<PostForm>();
 
@@ -66,6 +67,12 @@ const EditPost: React.FC<Props> = ({params}) => {
         const response = await fetch(`/api/admin/posts/${id}`)
         const data = await response.json();
         setPost(data.post);
+
+        // 全カテゴリーを取得する
+        const Allcategories = await fetch("/api/admin/categories")
+        const categoryData = await Allcategories.json();
+        // const AllCategoryLists = categoryData.categories.map((c: any) => c.name);
+        setAllCategories(categoryData.categories)
 
         // カテゴリーのオブジェクトを取得
         const categoryLists = data.post.postCategories.map((c: any) => c.category);
@@ -85,11 +92,12 @@ const EditPost: React.FC<Props> = ({params}) => {
   // カテゴリーの選択
   const handleChange = (e: SelectChangeEvent<typeof categoryName>) => {
     const { target: { value }} = e;
+    
     const selectedCategoryNames = typeof value === "string" ? value.split(",") : value;
     setCategoryName(selectedCategoryNames);
 
     // 選択されたカテゴリー名に基づいてselectedCategoriesを更新
-    const updatedSelectedCategories = categories.filter((category) => 
+    const updatedSelectedCategories = AllCategories.filter((category) => 
       selectedCategoryNames.includes(category.name)
     );
 
@@ -203,7 +211,7 @@ const EditPost: React.FC<Props> = ({params}) => {
               </Box>
             )}      
           >
-            {categories && categories.map((category) => {
+            {AllCategories.map((category) => {
               return(
                 <MenuItem 
                   key={category.id}
