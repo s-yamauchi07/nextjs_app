@@ -12,20 +12,23 @@ import { RequestPostBody } from "@/app/_type/RequestPostBody";
 import { PostRequestCategoryBody } from '../_type/PostRequestCategoryBody';
 
 type PostFormProps = {
+  onsubmit: SubmitHandler<any>;
+  handleChange: (event: SelectChangeEvent<string[]>) => void;
+  handleDelete?: () => void;
   categoryName: string[];
   categories: PostRequestCategoryBody[];
-  handleChange: (event: SelectChangeEvent<string[]>) => void;
-  onsubmit: SubmitHandler<any>;
+  post?: RequestPostBody;
+  isEdit?: boolean;
 }
 
-const PostForm: React.FC<PostFormProps> = ({onsubmit, categories, categoryName, handleChange}) => {
+const PostForm: React.FC<PostFormProps> = ({onsubmit, handleChange, handleDelete,categories, categoryName, post, isEdit}) => {
   const { register, handleSubmit } = useForm<RequestPostBody>();
   const theme = useTheme();
 
   return(
     <div className="p-10 w-full">
       <h2 className="text-xl font-bold mb-6">
-        記事作成
+        {isEdit? "記事編集" : "記事作成"}
       </h2>
 
       <form 
@@ -39,6 +42,7 @@ const PostForm: React.FC<PostFormProps> = ({onsubmit, categories, categoryName, 
           </InputLabel>
           <OutlinedInput type="text"
             id="title"
+            defaultValue={post?.title}
             {...register("title")}
           />
         </div>
@@ -52,6 +56,7 @@ const PostForm: React.FC<PostFormProps> = ({onsubmit, categories, categoryName, 
           <TextareaAutosize
             minRows={3}
             id="content"
+            defaultValue={post?.content}
             className="border border-solid border-gray-300 rounded-md p-2"
             {...register("content")}
           />
@@ -65,6 +70,7 @@ const PostForm: React.FC<PostFormProps> = ({onsubmit, categories, categoryName, 
           </InputLabel>
           <OutlinedInput type="text"
             id="thumbnailUrl"
+            defaultValue={post?.thumbnailUrl}
             {...register("thumbnailUrl")}
           />
         </div>
@@ -103,14 +109,32 @@ const PostForm: React.FC<PostFormProps> = ({onsubmit, categories, categoryName, 
           </Select>  
         </div>
 
-        <div>
-          <button 
-            type="submit"
-            className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
-          >
-            作成
-          </button>
-        </div>
+        {isEdit ? (
+          <div className="flex gap-2">
+            <button 
+              type="submit"
+              className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
+            >
+              編集  
+            </button>
+            <button 
+              type="button"
+              className="bg-red-600 text-white font-bold rounded-lg px-4 py-2"
+              onClick={() => handleDelete?.()}
+            >
+              削除
+            </button>
+          </div>
+        ) : (
+          <div>
+            <button 
+              type="submit"
+              className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
+            >
+              作成
+            </button>
+          </div>
+        )}
       </form>
     </div>
   )
