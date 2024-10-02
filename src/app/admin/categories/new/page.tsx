@@ -1,6 +1,8 @@
 "use client"
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
+
 
 type Category = {
   name: string
@@ -8,6 +10,7 @@ type Category = {
 
 const AddCategory: React.FC = () => {
   const { register, handleSubmit, reset } = useForm<Category>();
+  const router = useRouter();
 
   const onsubmit: SubmitHandler<Category> = async (data) => {
     try {
@@ -16,6 +19,7 @@ const AddCategory: React.FC = () => {
         body: JSON.stringify(data),
       })
       reset()
+      router.push("/admin/categories")
     } catch(error) {
       console.log(error)
       alert('カテゴリー投稿に失敗しました');

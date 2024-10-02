@@ -43,7 +43,9 @@ const EditCategories: React.FC<Props> = ({params}) => {
         body: JSON.stringify(data), 
       })
       const updateCategory = await response.json();
+
       setValue("name", updateCategory.category.name);
+      router.push("/admin/categories")
       alert("カテゴリーを更新しました")
     }catch(error){
       console.log(error)
@@ -57,7 +59,7 @@ const EditCategories: React.FC<Props> = ({params}) => {
         body: JSON.stringify(id)
       })
       const { status } = await response.json();
-      console.log(status)
+      alert("カテゴリーを削除しました")
       if(status == "OK") {
         router.push("/admin/categories");
       }
