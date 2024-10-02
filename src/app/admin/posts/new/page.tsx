@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation"
-
 import { Theme, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -49,13 +48,19 @@ const NewPost: React.FC = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const { register, handleSubmit, setValue, reset } = useForm<PostForm>();
 
   const handleChange = (e: SelectChangeEvent<typeof categoryName>) => {
     const { target: { value },} = e;
-    setCategoryName(
-      typeof value === "string" ? value.split(",") : value,
+    const selectedCategoryNames = typeof value === "string" ? value.split(",") : value;
+    setCategoryName(selectedCategoryNames);
+
+    // 選択されたカテゴリー名に基づいて、selectedCategoriesを更新
+    const updatedSelectedCategories = categories.filter((category) => 
+      selectedCategoryNames.includes(category.name)
     );
+    setSelectedCategories(updatedSelectedCategories);
   };
 
   // カテゴリー一覧を取得する
@@ -65,6 +70,7 @@ const NewPost: React.FC = () => {
         const response = await fetch("/api/admin/categories")
         const { categories } = await response.json();
         setCategories(categories)
+
       } catch(error) {
         console.log(error)
       }
@@ -76,7 +82,7 @@ const NewPost: React.FC = () => {
   const onsubmit: SubmitHandler<PostForm> = async (data) => {
     const postData = {
       ...data,
-      categories: categories,
+      categories: setSelectedCategories,
     };
     
     try{

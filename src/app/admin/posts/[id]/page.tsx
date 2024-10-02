@@ -56,7 +56,6 @@ const EditPost: React.FC<Props> = ({params}) => {
   const [post, setPost] = useState<PostForm>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
-  const [AllCategories, setAllCategories] = useState<Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const { register, handleSubmit } = useForm<PostForm>();
 
@@ -72,11 +71,10 @@ const EditPost: React.FC<Props> = ({params}) => {
         const Allcategories = await fetch("/api/admin/categories")
         const categoryData = await Allcategories.json();
         // const AllCategoryLists = categoryData.categories.map((c: any) => c.name);
-        setAllCategories(categoryData.categories)
+        setCategories(categoryData.categories)
 
         // カテゴリーのオブジェクトを取得
         const categoryLists = data.post.postCategories.map((c: any) => c.category);
-        setCategories(categoryLists);
 
         // カテゴリ名のリストをカテゴリーの初期値に設定
         const categoryNames = categoryLists.map((c: Category) => c.name);
@@ -97,7 +95,7 @@ const EditPost: React.FC<Props> = ({params}) => {
     setCategoryName(selectedCategoryNames);
 
     // 選択されたカテゴリー名に基づいてselectedCategoriesを更新
-    const updatedSelectedCategories = AllCategories.filter((category) => 
+    const updatedSelectedCategories = categories.filter((category) => 
       selectedCategoryNames.includes(category.name)
     );
 
@@ -118,6 +116,7 @@ const EditPost: React.FC<Props> = ({params}) => {
         body: JSON.stringify(updateData),
       })
       router.push("/admin/posts")
+      alert('記事を更新しました');
     } catch(error) {
       console.log(error);
       alert('記事の更新に失敗しました');
@@ -211,7 +210,7 @@ const EditPost: React.FC<Props> = ({params}) => {
               </Box>
             )}      
           >
-            {AllCategories.map((category) => {
+            {categories.map((category) => {
               return(
                 <MenuItem 
                   key={category.id}
@@ -230,7 +229,7 @@ const EditPost: React.FC<Props> = ({params}) => {
             type="submit"
             className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
           >
-            作成
+            編集
           </button>
           <button 
             type="button"
