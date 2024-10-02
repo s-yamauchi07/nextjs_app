@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation"
-import { Theme, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
+import { MenuProps, getStyles } from "@/utils/categoriesUtils";
+
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,53 +13,19 @@ import MenuItem from '@mui/material/MenuItem';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
+import { PostRequestCategoryBody } from "@/app/_type/PostRequestCategoryBody";
+import { RequestPostBody } from "@/app/_type/RequestPostBody";
+import { PostProps } from "@/app/_type/PostProps";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-type PostForm = {
-  title: string
-  content: string
-  thumbnailUrl: string
-  categories:  { id: number }[]
-}
-
-type Category = {
-  id: string
-  name: string
-}
-
-type Props = {
-  params: {
-    id: string
-  }
-}
-
-function getStyles(category: Category, categoryName: string[], theme: Theme) {
-  return {
-    fontWeight: categoryName.includes(category.name)
-      ? theme.typography.fontWeightMedium
-      : theme.typography.fontWeightRegular,
-  };
-}
-
-const EditPost: React.FC<Props> = ({params}) => {
+const EditPost: React.FC<PostProps> = ({params}) => {
   const { id } = params
   const router = useRouter();
   const theme = useTheme();
-  const [post, setPost] = useState<PostForm>();
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [post, setPost] = useState<RequestPostBody>();
+  const [categories, setCategories] = useState<PostRequestCategoryBody[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const { register, handleSubmit } = useForm<PostForm>();
+  const [selectedCategories, setSelectedCategories] = useState<PostRequestCategoryBody[]>([]);
+  const { register, handleSubmit } = useForm<RequestPostBody>();
 
   // 記事データを取得
   useEffect(()=> {
@@ -77,7 +45,7 @@ const EditPost: React.FC<Props> = ({params}) => {
         const categoryLists = data.post.postCategories.map((c: any) => c.category);
 
         // カテゴリ名のリストをカテゴリーの初期値に設定
-        const categoryNames = categoryLists.map((c: Category) => c.name);
+        const categoryNames = categoryLists.map((c: PostRequestCategoryBody) => c.name);
         setCategoryName(categoryNames);
 
       } catch(error) {
@@ -104,7 +72,7 @@ const EditPost: React.FC<Props> = ({params}) => {
 
 
   //記事更新
-  const onsubmit: SubmitHandler<PostForm> = async (data) => {
+  const onsubmit: SubmitHandler<RequestPostBody> = async (data) => {
     const updateData = {
       ...data,
       categories: selectedCategories,
