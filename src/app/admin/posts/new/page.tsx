@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation"
 
 import { Theme, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -45,6 +46,7 @@ function getStyles(category: Category, categoryName: string[], theme: Theme) {
 
 const NewPost: React.FC = () => {
   const theme = useTheme();
+  const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const { register, handleSubmit, setValue, reset } = useForm<PostForm>();
@@ -82,10 +84,8 @@ const NewPost: React.FC = () => {
         method: "POST",
         body: JSON.stringify(postData),
       })
-      reset()
-
-      setCategoryName([]);
-      setValue("categories", []);
+      alert("記事を投稿しました")
+      router.push("/admin/posts");
     }catch (error) {
       console.log(error)
       alert('記事投稿に失敗しました');
