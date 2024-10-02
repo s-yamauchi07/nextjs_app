@@ -73,8 +73,6 @@ const NewPost: React.FC = () => {
 
   // 記事の新規登録を実装
   const onsubmit: SubmitHandler<PostForm> = async (data) => {
-    //選択したcategoryのデータを連想配列を使って新しく配列作成
-
     const postData = {
       ...data,
       categories: categories,
