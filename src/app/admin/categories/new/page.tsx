@@ -2,17 +2,13 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
-
-
-type Category = {
-  name: string
-}
+import { RequestCategoryBody } from "@/app/_type/RequestCategoryBody";
 
 const AddCategory: React.FC = () => {
-  const { register, handleSubmit, reset } = useForm<Category>();
+  const { register, handleSubmit, reset } = useForm<RequestCategoryBody>();
   const router = useRouter();
 
-  const onsubmit: SubmitHandler<Category> = async (data) => {
+  const onsubmit: SubmitHandler<RequestCategoryBody> = async (data) => {
     try {
       await fetch("/api/admin/categories", {
         method: "POST",

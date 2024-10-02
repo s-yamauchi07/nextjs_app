@@ -2,14 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-type Category = {
-  id: string
-  name: string
-}
+import { PostRequestCategoryBody } from "../../_type/PostRequestCategoryBody";
 
 const AllCategories: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<PostRequestCategoryBody[]>([]);
 
   useEffect(() => {
     const AllCategories = async () => {
