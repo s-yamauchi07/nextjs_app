@@ -116,6 +116,21 @@ const EditPost: React.FC<Props> = ({params}) => {
     }
   }
 
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/api/admin/posts/${id}`, {
+        method: "DELETE",
+        body: JSON.stringify(id)
+      })
+      const { status } = await response.json();
+      if(status == "OK") {
+        router.push("/admin/posts");
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   if(!post) return <div>読み込み中...</div>
 
   return(
@@ -204,12 +219,19 @@ const EditPost: React.FC<Props> = ({params}) => {
           </Select>  
         </div>
 
-        <div>
+        <div className="flex gap-2">
           <button 
             type="submit"
             className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
           >
             作成
+          </button>
+          <button 
+            type="button"
+            className="bg-red-600 text-white font-bold rounded-lg px-4 py-2"
+            onClick={() => handleDelete()}
+          >
+            削除
           </button>
         </div>
       </form>
