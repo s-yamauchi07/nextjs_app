@@ -4,6 +4,5 @@ export interface RequestPostBody {
   title: string
   content: string
   thumbnailUrl: string
-  createdAt: string
   postCategories: { category: RequestCategoryBody}[]
 }
