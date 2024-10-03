@@ -12,7 +12,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({onsubmit, handleDelete, isEd
   const { register, handleSubmit } = useForm<PostRequestCategoryBody>();
     
   return(
-    <div className="p-10 w-full">
+    <div className="p-10">
       <h2 className="text-xl font-bold mb-6">
         {isEdit ? "カテゴリー編集" : "カテゴリー作成"}
       </h2>

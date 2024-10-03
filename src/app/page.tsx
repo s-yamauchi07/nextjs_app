@@ -2,24 +2,34 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import type { MicroCmsPost } from "./_type/MicroCmsPost";
 import parse from 'html-react-parser';
 
+type Category = {
+  id: number
+  name: string
+  createdAt: string
+  updatedAt: string
+}
+
+type Post = {
+  id: number
+  title: string
+  content: string
+  createdAt: string
+  postCategories: { category: Category }[]
+  thumbnailUrl: string
+}
+
 const Home: React.FC = () => {
-  const [posts, setPosts] = useState<MicroCmsPost[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getAllPosts = async() => {
       try{
-        const response = await fetch("https://g0x5w95t7h.microcms.io/api/v1/posts", {
-          headers: {
-            'X-MICROCMS-API-KEY': process.env
-              .NEXT_PUBLIC_MICROCMS_API_KEY as string
-          },
-        })
-        const { contents } = await response.json();
-        setPosts(contents);
+        const response = await fetch("/api/posts")
+        const data  = await response.json();
+        setPosts(data.posts);
       } catch(error) {
         console.log(error);
       } finally {
@@ -44,10 +54,10 @@ const Home: React.FC = () => {
                 <div className="flex justify-between">
                   <p className="text-sm text-gray-400">{changeDateFormat(post.createdAt)}</p>
                   <div className="flex gap-2">
-                    {post.categories.map((category, index)=>{
+                    {post.postCategories.map((postCategory, index)=>{
                       return(
                         <span key={index} className="px-2 py-1 text-xs text-blue-600 border border-solid border-blue-600 rounded">
-                          {category.name}
+                          {postCategory.category.name}
                         </span>
                       )
                     })}
