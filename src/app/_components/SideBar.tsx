@@ -7,10 +7,8 @@ const SideBar: React.FC = () => {
   const pathname = usePathname();
 
   const isSelected = (url: string) => {
-    if (pathname === url || pathname.startsWith(url + "/")) {
-      return true;
-    }
-    return false;
+    //pathnameがurlと同じ、またはpathnameがurlから始まる場合はtrue, そうでなければfalseを返す
+    return pathname === url || pathname.startsWith(url + "/")
   };
 
   return(
