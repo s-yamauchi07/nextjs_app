@@ -1,15 +1,15 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import { PostRequestCategoryBody } from "../_type/PostRequestCategoryBody";
+import { RequestCategoryBody } from "../_type/RequestCategoryBody";
 
 type CategoryFormProps = {
-  onsubmit: SubmitHandler<PostRequestCategoryBody>;
+  onsubmit: SubmitHandler<RequestCategoryBody>;
   handleDelete?: () => void;
   isEdit?: boolean;
-  category? : PostRequestCategoryBody;
+  category? : RequestCategoryBody;
 }
 
 const CategoryForm: React.FC<CategoryFormProps> = ({onsubmit, handleDelete, isEdit, category}) => {
-  const { register, handleSubmit } = useForm<PostRequestCategoryBody>();
+  const { register, handleSubmit } = useForm<RequestCategoryBody>();
     
   return(
     <div className="p-10">

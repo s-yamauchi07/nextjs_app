@@ -3,15 +3,15 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"
 import { useForm, SubmitHandler } from "react-hook-form";
-import { PostRequestCategoryBody } from "../../../_type/PostRequestCategoryBody";
+import { RequestCategoryBody } from "../../../_type/RequestCategoryBody";
 import { PostProps } from "@/app/_type/PostProps";
 import CategoryForm from "@/app/_components/CategoryForm";
 
 const EditCategories: React.FC<PostProps> = ({params}) => {
   const { id } = params
   const router = useRouter();
-  const [category, setCategory] = useState<PostRequestCategoryBody>();
-  const { setValue } = useForm<PostRequestCategoryBody>();
+  const [category, setCategory] = useState<RequestCategoryBody>();
+  const { setValue } = useForm<RequestCategoryBody>();
   
   useEffect(() => {
     const findCategory = async () => {
@@ -28,7 +28,7 @@ const EditCategories: React.FC<PostProps> = ({params}) => {
     findCategory();
   }, []);
   
-  const onsubmit: SubmitHandler<PostRequestCategoryBody> = async(data) => {
+  const onsubmit: SubmitHandler<RequestCategoryBody> = async(data) => {
     try {
       const response = await fetch(`/api/admin/categories/${id}`, {
         method: "PUT",

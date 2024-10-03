@@ -2,16 +2,10 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-
-type Post = {
-  id: string
-  title: string
-  content: string
-  createdAt: string
-}
+import { RequestPostBody } from "@/app/_type/RequestPostBody";
 
 const AllPost: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<RequestPostBody[]>([]);
 
   useEffect(()=> {
     const AllPost = async () => {

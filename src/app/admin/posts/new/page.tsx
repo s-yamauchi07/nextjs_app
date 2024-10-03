@@ -5,15 +5,15 @@ import { useState, useEffect } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation"
 import { SelectChangeEvent } from '@mui/material/Select';
-import { PostRequestCategoryBody } from "@/app/_type/PostRequestCategoryBody";
+import { RequestCategoryBody } from "@/app/_type/RequestCategoryBody";
 import { RequestPostBody } from "@/app/_type/RequestPostBody";
 
 
 const NewPost: React.FC = () => {
   const router = useRouter();
-  const [categories, setCategories] = useState<PostRequestCategoryBody[]>([]);
+  const [categories, setCategories] = useState<RequestCategoryBody[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<PostRequestCategoryBody[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<RequestCategoryBody[]>([]);
 
   const handleChange = (e: SelectChangeEvent<typeof categoryName>) => {
     const { target: { value },} = e;

@@ -2,26 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { RequestPostBody } from "./_type/RequestPostBody";
 import parse from 'html-react-parser';
 
-type Category = {
-  id: number
-  name: string
-  createdAt: string
-  updatedAt: string
-}
-
-type Post = {
-  id: number
-  title: string
-  content: string
-  createdAt: string
-  postCategories: { category: Category }[]
-  thumbnailUrl: string
-}
-
 const Home: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<RequestPostBody[]>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

@@ -4,22 +4,18 @@ import PostForm from "../../../_components/PostForm";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation"
-import { useTheme } from '@mui/material/styles';
 import { SelectChangeEvent } from '@mui/material/Select';
-
-import { PostRequestCategoryBody } from "@/app/_type/PostRequestCategoryBody";
+import { RequestCategoryBody } from "@/app/_type/RequestCategoryBody";
 import { RequestPostBody } from "@/app/_type/RequestPostBody";
 import { PostProps } from "@/app/_type/PostProps";
 
 const EditPost: React.FC<PostProps> = ({params}) => {
   const { id } = params
   const router = useRouter();
-  const theme = useTheme();
   const [post, setPost] = useState<RequestPostBody>();
-  const [categories, setCategories] = useState<PostRequestCategoryBody[]>([]);
+  const [categories, setCategories] = useState<RequestCategoryBody[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<PostRequestCategoryBody[]>([]);
-  const { register, handleSubmit } = useForm<RequestPostBody>();
+  const [selectedCategories, setSelectedCategories] = useState<RequestCategoryBody[]>([]);
 
   // 記事データを取得
   useEffect(()=> {
@@ -39,7 +35,7 @@ const EditPost: React.FC<PostProps> = ({params}) => {
         const categoryLists = data.post.postCategories.map((c: any) => c.category);
 
         // カテゴリ名のリストをカテゴリーの初期値に設定
-        const categoryNames = categoryLists.map((c: PostRequestCategoryBody) => c.name);
+        const categoryNames = categoryLists.map((c: RequestCategoryBody) => c.name);
         setCategoryName(categoryNames);
 
       } catch(error) {

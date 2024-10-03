@@ -9,14 +9,14 @@ import { MenuProps, getStyles } from "@/utils/categoriesUtils";
 import { useTheme } from '@mui/material/styles';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RequestPostBody } from "@/app/_type/RequestPostBody";
-import { PostRequestCategoryBody } from '../_type/PostRequestCategoryBody';
+import { RequestCategoryBody } from '../_type/RequestCategoryBody';
 
 type PostFormProps = {
   onsubmit: SubmitHandler<any>;
   handleChange: (event: SelectChangeEvent<string[]>) => void;
   handleDelete?: () => void;
   categoryName: string[];
-  categories: PostRequestCategoryBody[];
+  categories: RequestCategoryBody[];
   post?: RequestPostBody;
   isEdit?: boolean;
 }

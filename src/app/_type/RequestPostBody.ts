@@ -1,6 +1,9 @@
+import { RequestCategoryBody } from "./RequestCategoryBody"
 export interface RequestPostBody {
+  id: number
   title: string
   content: string
   thumbnailUrl: string
-  categories: { id: number }[]
+  createdAt: string
+  postCategories: { category: RequestCategoryBody}[]
 }

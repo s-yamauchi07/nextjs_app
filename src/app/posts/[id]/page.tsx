@@ -2,36 +2,12 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { PostProps } from "@/app/_type/PostProps";
+import { RequestPostBody } from "@/app/_type/RequestPostBody";
 import parse from 'html-react-parser';
 
-type Props = {
-  params: {
-    id: string;
-  };
-}
-
-type Category = {
-  id: number
-  postId: number
-  categoryId: number
-  name: string
-  category: {id: string, name: string}
-  createdAt: string
-  updatedAt: string
-}
-
-
-type RequestGetPost = {
-  id: string
-  title: string
-  content: string
-  createdAt: string;
-  postCategories: Category[]
-  thumbnailUrl: string
-}
-
-const Detail: React.FC<Props> = ({params}) => {
-  const [post, setPost] = useState<RequestGetPost | null>(null);
+const Detail: React.FC<PostProps> = ({params}) => {
+  const [post, setPost] = useState<RequestPostBody | null>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(()=>{
@@ -40,8 +16,6 @@ const Detail: React.FC<Props> = ({params}) => {
         const response = await fetch(`/api/posts/${params.id}`)
         const data = await response.json();
         setPost(data.post);
-        console.log(data.post)
-
       } catch(error) {
         console.log(error);
       } finally {
