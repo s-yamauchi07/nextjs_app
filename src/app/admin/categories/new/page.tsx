@@ -3,9 +3,10 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { RequestCategoryBody } from "@/app/_type/RequestCategoryBody";
+import CategoryForm from "@/app/_components/CategoryForm";
 
 const AddCategory: React.FC = () => {
-  const { register, handleSubmit, reset } = useForm<RequestCategoryBody>();
+  const { reset } = useForm<RequestCategoryBody>();
   const router = useRouter();
 
   const onsubmit: SubmitHandler<RequestCategoryBody> = async (data) => {
@@ -23,31 +24,9 @@ const AddCategory: React.FC = () => {
   }
 
   return(
-    <div className="p-10 w-full">
-      <h2 className="text-xl font-bold mb-6">
-        カテゴリー作成
-      </h2>
-
-      <form
-        onSubmit={handleSubmit(onsubmit)}
-        className="flex flex-col gap-4"
-      >
-        <label htmlFor="name">カテゴリー</label>
-        <input type="type"
-          id="name"
-          className="border border-solid border-gray-200 rounded-lg p-2"
-          {...register("name")}
-        />
-        <div>
-          <button 
-            type="submit"
-            className="bg-blue-600 text-white font-bold rounded-lg px-4 py-2"
-          >
-            作成
-          </button>
-        </div>
-      </form>
-    </div>
+    <CategoryForm
+      onsubmit={onsubmit}
+    />
   )
 }
 
