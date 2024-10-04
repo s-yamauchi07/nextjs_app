@@ -34,7 +34,7 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest) => {
   try {
     const body = await request.json()
-    const { title, content, thumbnailUrl, categories}: RequestPostBody  = body
+    const { title, content, thumbnailUrl, categories}  = body
 
     const data = await prisma.post.create({
       data: {

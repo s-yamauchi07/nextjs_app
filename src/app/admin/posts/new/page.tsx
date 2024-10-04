@@ -29,7 +29,7 @@ const NewPost: React.FC = () => {
 
   // カテゴリー一覧を取得する
   useEffect(()=> {
-    const AllCategories = async () => {
+    const allCategories = async () => {
       try {
         const response = await fetch("/api/admin/categories")
         const { categories } = await response.json();
@@ -39,7 +39,7 @@ const NewPost: React.FC = () => {
         console.log(error)
       }
     }
-    AllCategories();
+    allCategories();
   },[]);
 
   // 記事の新規登録を実装

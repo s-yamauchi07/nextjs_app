@@ -17,7 +17,7 @@ const AllPost: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(()=> {
-    const AllPost = async () => {
+    const allPost = async () => {
       try {
         const response = await fetch("/api/admin/posts")
         const data = await response.json();
@@ -26,10 +26,10 @@ const AllPost: React.FC = () => {
         console.log(error);
       }
     }
-    AllPost();
+    allPost();
   }, []);
 
-  const changeDateFormat = (date: any) => new Date(date).toLocaleDateString('ja-JP')
+  const changeDateFormat = (date: string) => new Date(date).toLocaleDateString('ja-JP')
 
   return(
     <div className="p-10 w-full">
