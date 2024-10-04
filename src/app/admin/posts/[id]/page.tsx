@@ -2,12 +2,17 @@
 
 import PostForm from "../../../_components/PostForm";
 import { useState, useEffect } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation"
 import { SelectChangeEvent } from '@mui/material/Select';
 import { RequestCategoryBody } from "@/app/_type/RequestCategoryBody";
 import { RequestPostBody } from "@/app/_type/RequestPostBody";
 import { PostProps } from "@/app/_type/PostProps";
+
+type apiResponse = {
+  status: string
+  post: RequestPostBody
+}
 
 const EditPost: React.FC<PostProps> = ({params}) => {
   const { id } = params
@@ -22,17 +27,16 @@ const EditPost: React.FC<PostProps> = ({params}) => {
     const fetchPost = async () => {
       try {
         const response = await fetch(`/api/admin/posts/${id}`)
-        const data = await response.json();
+        const data: apiResponse = await response.json();
         setPost(data.post);
 
         // 全カテゴリーを取得する
-        const Allcategories = await fetch("/api/admin/categories")
-        const categoryData = await Allcategories.json();
-        // const AllCategoryLists = categoryData.categories.map((c: any) => c.name);
+        const allCategories = await fetch("/api/admin/categories")
+        const categoryData = await allCategories.json();
         setCategories(categoryData.categories)
 
         // カテゴリーのオブジェクトを取得
-        const categoryLists = data.post.postCategories.map((c: any) => c.category);
+        const categoryLists = data.post.postCategories.map((c) => c.category);
 
         // カテゴリ名のリストをカテゴリーの初期値に設定
         const categoryNames = categoryLists.map((c: RequestCategoryBody) => c.name);
