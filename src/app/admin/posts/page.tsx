@@ -2,22 +2,13 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { RequestCategoryBody } from "@/app/_type/RequestCategoryBody";
+import { Post } from "../../_type/AllPostBody";
 
-type Post = { 
-  id: number
-  title: string
-  content: string
-  thumbnailUrl: string
-  createdAt: string
-  postCategories: { category : RequestCategoryBody }[]
-}
-
-const AllPost: React.FC = () => {
+const AllPosts: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(()=> {
-    const allPost = async () => {
+    const allPosts = async () => {
       try {
         const response = await fetch("/api/admin/posts")
         const data = await response.json();
@@ -26,7 +17,7 @@ const AllPost: React.FC = () => {
         console.log(error);
       }
     }
-    allPost();
+    allPosts();
   }, []);
 
   const changeDateFormat = (date: string) => new Date(date).toLocaleDateString('ja-JP')
@@ -69,4 +60,4 @@ const AllPost: React.FC = () => {
   )
 }
 
-export default AllPost;
+export default AllPosts;

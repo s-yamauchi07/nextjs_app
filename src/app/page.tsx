@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { RequestPostBody } from "./_type/RequestPostBody";
+import { Post } from "./_type/AllPostBody"
 import parse from 'html-react-parser';
 
 const Home: React.FC = () => {
-  const [posts, setPosts] = useState<RequestPostBody[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

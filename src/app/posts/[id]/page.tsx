@@ -3,18 +3,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PostProps } from "@/app/_type/PostProps";
-import { RequestPostBody } from "@/app/_type/RequestPostBody";
-import { RequestCategoryBody } from "@/app/_type/RequestCategoryBody";
+import { Post } from "../../_type/AllPostBody";
 import parse from 'html-react-parser';
-
-type Post = { 
-  id: number
-  title: string
-  content: string
-  thumbnailUrl: string
-  createdAt: string
-  postCategories: { category : RequestCategoryBody }[]
-}
 
 
 const Detail: React.FC<PostProps> = ({params}) => {
