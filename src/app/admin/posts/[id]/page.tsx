@@ -28,26 +28,32 @@ const EditPost: React.FC<PostProps> = ({params}) => {
       try {
         const response = await fetch(`/api/admin/posts/${id}`)
         const data: apiResponse = await response.json();
-        setPost(data.post);
-
-        // 全カテゴリーを取得する
-        const allCategories = await fetch("/api/admin/categories")
-        const categoryData = await allCategories.json();
-        setCategories(categoryData.categories)
-
-        // カテゴリーのオブジェクトを取得
-        const categoryLists = data.post.postCategories.map((c) => c.category);
-
-        // カテゴリ名のリストをカテゴリーの初期値に設定
-        const categoryNames = categoryLists.map((c: RequestCategoryBody) => c.name);
-        setCategoryName(categoryNames);
-
+        setPost(data.post)
       } catch(error) {
         console.log(error)
       }
     }
     fetchPost();
   }, []);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      // 全カテゴリーを取得する
+      const allCategories = await fetch("/api/admin/categories")
+      const categoryData = await allCategories.json();
+      setCategories(categoryData.categories)
+
+      if(post) {
+        // カテゴリーのオブジェクトを取得
+        const categoryLists = post.postCategories.map((c) => c.category);
+  
+        // カテゴリ名のリストをカテゴリーの初期値に設定
+        const categoryNames = categoryLists.map((c: RequestCategoryBody) => c.name);
+        setCategoryName(categoryNames);
+      }
+    }
+    fetchCategory();
+  },[])
 
   // カテゴリーの選択
   const handleChange = (e: SelectChangeEvent<typeof categoryName>) => {
