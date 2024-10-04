@@ -12,7 +12,7 @@ import { RequestPostBody } from "@/app/_type/RequestPostBody";
 import { RequestCategoryBody } from '../_type/RequestCategoryBody';
 
 type PostFormProps = {
-  onsubmit: SubmitHandler<any>;
+  onsubmit: SubmitHandler<RequestPostBody>;
   handleChange: (event: SelectChangeEvent<string[]>) => void;
   handleDelete?: () => void;
   categoryName: string[];
@@ -21,7 +21,7 @@ type PostFormProps = {
   isEdit?: boolean;
 }
 
-const PostForm: React.FC<PostFormProps> = ({onsubmit, handleChange, handleDelete,categories, categoryName, post, isEdit}) => {
+const PostForm: React.FC<PostFormProps> = ({onsubmit, handleChange, handleDelete, categories, categoryName, post, isEdit}) => {
   const { register, handleSubmit } = useForm<RequestPostBody>();
   const theme = useTheme();
 
