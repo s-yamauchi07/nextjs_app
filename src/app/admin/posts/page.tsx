@@ -2,10 +2,19 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { RequestPostBody } from "@/app/_type/RequestPostBody";
+import { RequestCategoryBody } from "@/app/_type/RequestCategoryBody";
+
+type Post = { 
+  id: number
+  title: string
+  content: string
+  thumbnailUrl: string
+  createdAt: string
+  postCategories: { category : RequestCategoryBody }[]
+}
 
 const AllPost: React.FC = () => {
-  const [posts, setPosts] = useState<RequestPostBody[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(()=> {
     const AllPost = async () => {
