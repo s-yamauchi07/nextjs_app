@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^6.1.1",
     "@prisma/client": "^5.20.0",
+    "@supabase/supabase-js": "^2.45.4",
     "axios": "^1.7.7",
     "html-react-parser": "^5.1.16",
     "next": "14.2.11",
