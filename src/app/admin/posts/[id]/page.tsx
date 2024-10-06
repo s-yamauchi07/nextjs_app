@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"
 import { RequestPostBody } from "@/app/_type/RequestPostBody";
 import { PostProps } from "@/app/_type/PostProps";
+import useSupabaseSession from "@/app/_hooks/useSupabaseSession";
 
 type apiResponse = {
   status: string
@@ -15,12 +16,20 @@ const EditPost: React.FC<PostProps> = ({params}) => {
   const { id } = params
   const router = useRouter();
   const [post, setPost] = useState<RequestPostBody>();
+  const { token } = useSupabaseSession();
 
   // 記事データを取得
   useEffect(()=> {
+    if (!token) return 
+
     const fetchPost = async () => {
       try {
-        const response = await fetch(`/api/admin/posts/${id}`)
+        const response = await fetch(`/api/admin/posts/${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          }
+        })
         const data: apiResponse = await response.json();
         setPost(data.post)
       } catch(error) {
@@ -31,10 +40,16 @@ const EditPost: React.FC<PostProps> = ({params}) => {
   }, []);
 
   const handleDelete = async () => {
+    if (!token) return
+
     try {
       const response = await fetch(`/api/admin/posts/${id}`, {
-        method: "DELETE",
-        body: JSON.stringify(id)
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+          method: "DELETE",
+          body: JSON.stringify(id),
+        }
       })
       const { status } = await response.json();
       if(status == "OK") {

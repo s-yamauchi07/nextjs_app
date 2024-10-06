@@ -1,11 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { RequestPostBody } from "../../../../_type/RequestPostBody";
+import useSupabaseSession from "@/app/_hooks/useSupabaseSession";
+import { supabase } from "@/utils/supabase";
 
 const prisma = new PrismaClient();
 
 // 記事詳細取得のAPI
 export const GET = async (request: NextRequest, { params }: { params: { id: string }}) => {
+  const token = request.headers.get("Authorization") ?? ""
+  const { error } = await supabase.auth.getUser(token)
+  
+  if (error) return NextResponse.json({ status: error.message}, { status: 400})
+  
   const { id } = params 
 
   try {
@@ -36,8 +42,12 @@ export const GET = async (request: NextRequest, { params }: { params: { id: stri
 
 // 記事更新のAPI
 export const PUT = async(request: NextRequest, {params}: { params: { id: string } }) => {
-  const { id } = params
+  const token = request.headers.get("Authorization") ?? ""
+  const { error } = await supabase.auth.getUser(token)
 
+  if (error) return NextResponse.json({ status: error.message}, { status: 400})
+    
+  const { id } = params
   const body = await request.json()
   const { title, content, thumbnailUrl, categories}  = body
 
@@ -78,6 +88,11 @@ export const PUT = async(request: NextRequest, {params}: { params: { id: string 
 
 // 記事削除のAPI
 export const DELETE = async (request: NextRequest, { params}: { params: { id: string } }) => {
+  const token = request.headers.get("Authorization") ?? ""
+  const { error } = await supabase.auth.getUser(token)
+  
+  if (error) return NextResponse.json({ status: error.message}, { status: 400})
+
   const { id } = params
 
   try {
