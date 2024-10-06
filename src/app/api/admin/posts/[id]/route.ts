@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import useSupabaseSession from "@/app/_hooks/useSupabaseSession";
 import { supabase } from "@/utils/supabase";
 
 const prisma = new PrismaClient();
