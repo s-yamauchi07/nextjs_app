@@ -48,7 +48,7 @@ export const PUT = async(request: NextRequest, {params}: { params: { id: string 
 
   const { id } = params
   const body = await request.json()
-  const { title, content, thumbnailUrl, categories}  = body
+  const { title, content, thumbnailImageKey, categories}  = body
 
   try {
     const post = await prisma.post.update({
@@ -58,7 +58,7 @@ export const PUT = async(request: NextRequest, {params}: { params: { id: string 
       data: {
         title,
         content,
-        thumbnailUrl
+        thumbnailImageKey
       },
     })
 

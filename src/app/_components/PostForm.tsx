@@ -49,17 +49,18 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
       const categoryData = await allCategories.json();
       setCategories(categoryData.categories)
 
-      if(post) {
+      if(post && post.thumbnailImageKey) {
         // カテゴリーのオブジェクトを取得
         const categoryLists = post.postCategories.map((c) => c.category);
   
         // カテゴリ名のリストをカテゴリーの初期値に設定
         const categoryNames = categoryLists.map((c: RequestCategoryBody) => c.name);
         setCategoryName(categoryNames);
+        setThumbnailImageKey(post.thumbnailImageKey);
       }
     }
     fetchCategory();
-  },[post])
+  },[token, post])
 
   // 画像取得のための処理
   useEffect(()=> {
@@ -91,7 +92,7 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
     
     const updateData = {
       ...data,
-      thumbnailUrl: thumbnailImageUrl,
+      thumbnailImageKey: thumbnailImageKey || post?.thumbnailImageKey,
       categories: selectedCategories,
     };
     
@@ -115,7 +116,6 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
   }
 
   const handleImageChange = async (event: ChangeEvent<HTMLInputElement>, ): Promise<void> => {
-    console.log(event.target.files)
     if (!event.target.files || event.target.files.length == 0) {
       return
     }
@@ -169,17 +169,15 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
         </div>
 
         <div className="flex flex-col">
-          <InputLabel htmlFor="thumbnailUrl"
+          <InputLabel htmlFor="thumbnailImageKey"
             className="mb-2"
           >
             サムネイルURL
           </InputLabel>
           <input type="file"
-            id="thumbnailUrl"
-            defaultValue={post?.thumbnailUrl}
+            id="thumbnailImageKey"
             onChange={handleImageChange}
             accept="image/*"
-            // {...register("thumbnailUrl")}
           />
           {thumbnailImageUrl && (
             <div className="mt-2">

@@ -33,12 +33,12 @@ const Detail: React.FC<PostProps> = ({params}) => {
 
   return(
     <div className="max-w-3xl m-auto pt-14">
-      {/* <Image 
-        src={post.thumbnailUrl}
+      <Image 
+        src={post.thumbnailImageKey}
         height={400}
         width={800}
         alt={post.title}
-      /> */}
+      />
       <div className="p-4">
         <div className="flex justify-between">
           <p className="text-sm text-gray-400">{changeDateFormat(post.createdAt)}</p>
