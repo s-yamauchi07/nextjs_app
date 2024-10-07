@@ -28,7 +28,7 @@ const AllPosts: React.FC = () => {
       }
     }
     allPosts();
-  }, []);
+  }, [token]);
 
   const changeDateFormat = (date: string) => new Date(date).toLocaleDateString('ja-JP')
 

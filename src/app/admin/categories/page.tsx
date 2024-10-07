@@ -26,7 +26,7 @@ const AllCategories: React.FC = () => {
       }
     }
     AllCategories();
-  }, []);
+  }, [token]);
 
   return(
     <div className="p-10 w-full">

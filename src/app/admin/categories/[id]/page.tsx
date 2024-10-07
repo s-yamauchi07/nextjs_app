@@ -35,7 +35,7 @@ const EditCategories: React.FC<PostProps> = ({params}) => {
       }
     }
     findCategory();
-  }, []);
+  }, [token]);
   
   const onsubmit: SubmitHandler<RequestCategoryBody> = async(data) => {
     if (!token) return 

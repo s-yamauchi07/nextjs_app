@@ -37,7 +37,7 @@ const EditPost: React.FC<PostProps> = ({params}) => {
       }
     }
     fetchPost();
-  }, []);
+  }, [token]);
 
   const handleDelete = async () => {
     if (!token) return

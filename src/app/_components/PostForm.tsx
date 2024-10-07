@@ -7,12 +7,15 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import { MenuProps, getStyles } from "@/utils/categoriesUtils";
 import { useTheme } from '@mui/material/styles';
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation"
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RequestPostBody } from "@/app/_type/RequestPostBody";
 import { RequestCategoryBody } from '../_type/RequestCategoryBody';
 import useSupabaseSession from "@/app/_hooks/useSupabaseSession";
+import { supabase } from "@/utils/supabase";
+import { v4 as uuidv4 } from 'uuid';
+import Image from 'next/image'
 
 type PostFormProps = {
   handleDelete?: () => void;
@@ -29,6 +32,8 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
   const [categories, setCategories] = useState<RequestCategoryBody[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<RequestCategoryBody[]>([]);
+  const [thumbnailImageKey, setThumbnailImageKey] = useState('')
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<null | string>(null,)
 
   
   useEffect(() => {
@@ -56,6 +61,18 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
     fetchCategory();
   },[post])
 
+  // 画像取得のための処理
+  useEffect(()=> {
+    if (!thumbnailImageKey) return
+
+    const fetcher = async () => {
+      const { data : { publicUrl}, } = await supabase.storage.from('post_thumbnail').getPublicUrl(thumbnailImageKey);
+      setThumbnailImageUrl(publicUrl)
+    };
+
+    fetcher();
+  },[thumbnailImageKey]);
+
   const handleChange = (e: SelectChangeEvent<typeof categoryName>) => {
     const { target: { value },} = e;
     const selectedCategoryNames = typeof value === "string" ? value.split(",") : value;
@@ -74,6 +91,7 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
     
     const updateData = {
       ...data,
+      thumbnailUrl: thumbnailImageUrl,
       categories: selectedCategories,
     };
     
@@ -94,6 +112,23 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
       console.log(error);
       alert(isEdit ? '更新に失敗しました' : '登録に失敗しました');
     }
+  }
+
+  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>, ): Promise<void> => {
+    console.log(event.target.files)
+    if (!event.target.files || event.target.files.length == 0) {
+      return
+    }
+
+    const file = event.target.files[0]
+    const filePath = `private/${uuidv4()}`
+    const { data, error } = await supabase.storage.from('post_thumbnail').upload(filePath, file, { cacheControl: '3600', upsert: false, })
+    
+    if (error) {
+      alert(error.message)
+      return
+    }
+    setThumbnailImageKey(data.path)
   }
 
   return(
@@ -139,11 +174,23 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
           >
             サムネイルURL
           </InputLabel>
-          <OutlinedInput type="text"
+          <input type="file"
             id="thumbnailUrl"
             defaultValue={post?.thumbnailUrl}
-            {...register("thumbnailUrl")}
+            onChange={handleImageChange}
+            accept="image/*"
+            // {...register("thumbnailUrl")}
           />
+          {thumbnailImageUrl && (
+            <div className="mt-2">
+              <Image 
+                src={thumbnailImageUrl} 
+                alt="thumbnail"
+                width={400}
+                height={400}
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col">
