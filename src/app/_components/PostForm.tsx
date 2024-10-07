@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation"
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RequestPostBody } from "@/app/_type/RequestPostBody";
 import { RequestCategoryBody } from '../_type/RequestCategoryBody';
+import useSupabaseSession from "@/app/_hooks/useSupabaseSession";
 
 type PostFormProps = {
   handleDelete?: () => void;
@@ -23,15 +24,23 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
   const { register, handleSubmit } = useForm<RequestPostBody>();
   const theme = useTheme();
   const router = useRouter();
+  const { token } = useSupabaseSession();
 
   const [categories, setCategories] = useState<RequestCategoryBody[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<RequestCategoryBody[]>([]);
 
+  
   useEffect(() => {
+    if (!token) return;
     const fetchCategory = async () => {
       // 全カテゴリーを取得する
-      const allCategories = await fetch("/api/admin/categories")
+      const allCategories = await fetch("/api/admin/categories", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        }
+      })
       const categoryData = await allCategories.json();
       setCategories(categoryData.categories)
 
@@ -61,6 +70,8 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
 
   //記事投稿
   const onsubmit: SubmitHandler<RequestPostBody> = async (data) => {
+    if (!token) return
+    
     const updateData = {
       ...data,
       categories: selectedCategories,
@@ -68,6 +79,10 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
     
     try {
       const response = await fetch(`/api/admin/posts/${isEdit ? `${post?.id}` : ""}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
         method: isEdit ? "PUT" : "POST",
         body: JSON.stringify(updateData),
       });

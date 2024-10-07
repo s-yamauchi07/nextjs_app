@@ -47,9 +47,9 @@ const EditPost: React.FC<PostProps> = ({params}) => {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
-          method: "DELETE",
-          body: JSON.stringify(id),
-        }
+        },
+        method: "DELETE",
+        body: JSON.stringify(id),
       })
       const { status } = await response.json();
       if(status == "OK") {
