@@ -23,7 +23,7 @@ const Header: React.FC = () => {
         <div className="flex items-center gap-4">
           {session ? (
             <> 
-              <Link href="/admin" className="header-link"> 管理画面 </Link>
+              <Link href="/admin/posts" className="header-link"> 管理画面 </Link>
               <button onClick={handleLogout}>ログアウト</button>
             </>
           ) : (
