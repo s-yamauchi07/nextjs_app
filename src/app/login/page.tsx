@@ -2,7 +2,6 @@
 
 import { supabase } from "@/utils/supabase"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 
 type User = {
@@ -11,9 +10,8 @@ type User = {
 }
 
 const Login = () => {
-  // const [email, setEmail] = useState('')
-  // const [password, setPassword] = useState('')
-  const { register, handleSubmit, setValue } = useForm<User>();
+ 
+  const { register, handleSubmit } = useForm<User>();
   const router = useRouter()
 
   const onsubmit: SubmitHandler<User> = async (data) => {
@@ -39,7 +37,6 @@ const Login = () => {
             id="email" 
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@company.com"
             required
-            // onChange={(e) => setEmail(e.target.value)} />
             {...register("email")}
            /> 
         </div>
@@ -51,7 +48,6 @@ const Login = () => {
             id="password"
             placeholder="••••••••"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required
-            // onChange={(e) => setPassword(e.target.value)} 
             {...register("password")}
           />
         </div>
