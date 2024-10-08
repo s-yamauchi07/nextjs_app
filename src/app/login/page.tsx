@@ -3,15 +3,21 @@
 import { supabase } from "@/utils/supabase"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useForm, SubmitHandler } from "react-hook-form"
+
+type User = {
+  email: string
+  password: string
+}
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  // const [email, setEmail] = useState('')
+  // const [password, setPassword] = useState('')
+  const { register, handleSubmit, setValue } = useForm<User>();
   const router = useRouter()
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const onsubmit: SubmitHandler<User> = async (data) => {
+    const { email, password } = data
     const { error } = await supabase.auth.signInWithPassword( {email, password}, )
 
     if (error) {
@@ -24,28 +30,30 @@ const Login = () => {
 
   return(
     <div className="flex justify-center pt-[240px]">
-      <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-[400px]">
+      <form onSubmit={handleSubmit(onsubmit)} className="space-y-4 w-full max-w-[400px]">
         <div>
           <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900" >
             メールアドレス
           </label>
           <input type="email" 
-            name="email" 
             id="email" 
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@company.com"
             required
-            onChange={(e) => setEmail(e.target.value)} />
+            // onChange={(e) => setEmail(e.target.value)} />
+            {...register("email")}
+           /> 
         </div>
         <div>
           <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900" >
             パスワード
           </label>
           <input type="password" 
-            name="password"
             id="password"
             placeholder="••••••••"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required
-            onChange={(e) => setPassword(e.target.value)} />
+            // onChange={(e) => setPassword(e.target.value)} 
+            {...register("password")}
+          />
         </div>
         <div>
           <button type="submit" 
