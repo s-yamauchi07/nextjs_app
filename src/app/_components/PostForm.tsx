@@ -24,7 +24,7 @@ type PostFormProps = {
 }
 
 const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
-  const { register, handleSubmit } = useForm<RequestPostBody>();
+  const { register, handleSubmit, setValue, watch } = useForm<RequestPostBody>();
   const theme = useTheme();
   const router = useRouter();
   const { token } = useSupabaseSession();
@@ -32,7 +32,7 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
   const [categories, setCategories] = useState<RequestCategoryBody[]>([]);
   const [categoryName, setCategoryName] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<RequestCategoryBody[]>([]);
-  const [thumbnailImageKey, setThumbnailImageKey] = useState('')
+  const thumbnailImageKey = watch("thumbnailImageKey")
   const [thumbnailImageUrl, setThumbnailImageUrl] = useState<null | string>(null,)
 
   
@@ -56,7 +56,7 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
         // カテゴリ名のリストをカテゴリーの初期値に設定
         const categoryNames = categoryLists.map((c: RequestCategoryBody) => c.name);
         setCategoryName(categoryNames);
-        setThumbnailImageKey(post.thumbnailImageKey);
+        setValue("thumbnailImageKey", post.thumbnailImageKey);
       }
     }
     fetchCategory();
@@ -128,7 +128,7 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
       alert(error.message)
       return
     }
-    setThumbnailImageKey(data.path)
+    setValue("thumbnailImageKey", data.path)
   }
 
   return(
@@ -176,6 +176,7 @@ const PostForm: React.FC<PostFormProps> = ({handleDelete, post, isEdit}) => {
           </InputLabel>
           <input type="file"
             id="thumbnailImageKey"
+            name="thumbnailImageKey"
             onChange={handleImageChange}
             accept="image/*"
           />
