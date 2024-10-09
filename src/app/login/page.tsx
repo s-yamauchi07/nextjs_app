@@ -36,8 +36,9 @@ const Login = () => {
           <input type="email" 
             id="email" 
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@company.com"
-            required
-            {...register("email")}
+            {...register("email", {
+              required: true
+            })}
            /> 
         </div>
         <div>
@@ -47,8 +48,10 @@ const Login = () => {
           <input type="password" 
             id="password"
             placeholder="••••••••"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required
-            {...register("password")}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            {...register("password", {
+              required: true
+            })}
           />
         </div>
         <div>
