@@ -5,12 +5,13 @@ import { useEffect, useState } from "react";
 import { PostProps } from "@/app/_type/PostProps";
 import { Post } from "../../_type/AllPostBody";
 import parse from 'html-react-parser';
-
+import { supabase } from "@/utils/supabase";
 
 const Detail: React.FC<PostProps> = ({params}) => {
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
-
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<null | string>(null)
+  
   useEffect(()=>{
     const findPost = async() => {
       try {
@@ -26,6 +27,18 @@ const Detail: React.FC<PostProps> = ({params}) => {
     findPost();
   },[]);
 
+  // 画像取得のための処理
+  useEffect(()=> {
+    if (!post || !post.thumbnailImageKey) return
+
+    const fetcher = async () => {
+      const { data : { publicUrl}, } = await supabase.storage.from('post_thumbnail').getPublicUrl(post.thumbnailImageKey);
+      setThumbnailImageUrl(publicUrl);
+    };
+
+    fetcher();
+  },[post]);
+
   const changeDateFormat = (date: string) => new Date(date).toLocaleDateString('ja-JP');
 
   if(isLoading) return <div>読み込み中...</div>;
@@ -33,12 +46,14 @@ const Detail: React.FC<PostProps> = ({params}) => {
 
   return(
     <div className="max-w-3xl m-auto pt-14">
-      {/* <Image 
-        src={post.thumbnailUrl}
-        height={400}
-        width={800}
-        alt={post.title}
-      /> */}
+      {thumbnailImageUrl && (
+        <Image 
+          src={thumbnailImageUrl}
+          height={400}
+          width={800}
+          alt={post.title}
+        />
+      )}  
       <div className="p-4">
         <div className="flex justify-between">
           <p className="text-sm text-gray-400">{changeDateFormat(post.createdAt)}</p>

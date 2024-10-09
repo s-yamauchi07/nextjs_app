@@ -3,14 +3,24 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Post } from "../../_type/AllPostBody";
+import useSupabaseSession from "@/app/_hooks/useSupabaseSession";
 
 const AllPosts: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const { token } = useSupabaseSession()
 
   useEffect(()=> {
+    //未ログイン(tokenがない)場合は、returnする
+    if (!token) return
+
     const allPosts = async () => {
       try {
-        const response = await fetch("/api/admin/posts")
+        const response = await fetch("/api/admin/posts", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          }
+        })
         const data = await response.json();
         setPosts(data.posts);
       } catch(error) {
@@ -18,7 +28,7 @@ const AllPosts: React.FC = () => {
       }
     }
     allPosts();
-  }, []);
+  }, [token]);
 
   const changeDateFormat = (date: string) => new Date(date).toLocaleDateString('ja-JP')
 

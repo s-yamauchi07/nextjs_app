@@ -3,14 +3,22 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { RequestCategoryBody } from "../../_type/RequestCategoryBody";
+import useSupabaseSession from "@/app/_hooks/useSupabaseSession";
 
 const AllCategories: React.FC = () => {
   const [categories, setCategories] = useState<RequestCategoryBody[]>([]);
+  const { token } = useSupabaseSession()
 
   useEffect(() => {
+    if (!token) return
     const AllCategories = async () => {
       try {
-        const response = await fetch("/api/admin/categories")
+        const response = await fetch("/api/admin/categories", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        })
         const { categories } = await response.json();
         setCategories(categories)
       } catch(error) {
@@ -18,7 +26,7 @@ const AllCategories: React.FC = () => {
       }
     }
     AllCategories();
-  }, []);
+  }, [token]);
 
   return(
     <div className="p-10 w-full">

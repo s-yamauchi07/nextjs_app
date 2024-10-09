@@ -1,10 +1,20 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { RequestPostBody } from "../../../_type/RequestPostBody";
+import { supabase } from '@/utils/supabase'
 
 const prisma = new PrismaClient();
 
+const checkAuthorization = async (request: NextRequest) => {
+  // headersからtokenを受け取り、supabaseに送信。送信結果がnullかundefinedだったら''をtokenに代入。
+  const token = request.headers.get('Authorization') ?? ''
+  const { error } = await supabase.auth.getUser(token)
+  // supabaseにからエラー返却されたら、レスポンスでエラーを返す。
+  if (error) return NextResponse.json({ status: error.message }, { status: 400 })
+}
+
 export const GET = async (request: NextRequest) => {
+  checkAuthorization(request);
+
   try {
     const posts = await prisma.post.findMany({
       include: {
@@ -32,15 +42,17 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
+  checkAuthorization(request);
+  
   try {
     const body = await request.json()
-    const { title, content, thumbnailUrl, categories}  = body
+    const { title, content, thumbnailImageKey, categories}  = body
 
     const data = await prisma.post.create({
       data: {
         title,
         content,
-        thumbnailUrl,
+        thumbnailImageKey,
       },
     })
 
